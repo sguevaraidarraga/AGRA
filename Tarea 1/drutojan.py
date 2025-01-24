@@ -2,10 +2,10 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem B - drutojan
-    Enero 22 de 2025
+    Enero 23 de 2025
 """
 
-from sys import stdin
+from collections import deque
 
 class Person:
     def __init__(self, list):
@@ -14,7 +14,7 @@ class Person:
     def __str__(self):
         return f"{self.timeSpent}"
 def main():
-    cases = int(stdin.readline().strip())
+    cases = int(input())
     names = ["Ja", "Sam", "Sha", "Sid", "Tan"]
     currCase = 1
     while cases:
@@ -22,9 +22,9 @@ def main():
         mins, arrivalTime, sitting = input().split()
         mins, arrivalTime = int(mins), int(arrivalTime)
         for i in range(len(names)):
-            ln = list(input().split())
-            tmp = ln[1:]
-            p = Person(tmp)
+            ln = deque(input().split())
+            ln.popleft()
+            p = Person(ln)
             data[names[i]] = p
         i = 0
         while i < arrivalTime:
@@ -35,7 +35,7 @@ def main():
             else:
                 p.timeSpent += mins-(i-arrivalTime)
             sitting = p.namesList[0]
-            del p.namesList[0]
+            p.namesList.popleft()
             p.namesList.append(sitting)
             i += 2
         print(f"Case {currCase}:")
