@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <stack>
 #include <vector>
 
 using namespace std;
@@ -26,7 +27,14 @@ void printVec(vector<int> &v) {
     }
 }
 int main() {
-    vector<int> a = factors(20);
-    printVec(a);
+    int cases, n;
+    while(cin >> cases && cases != 0) {
+        stack<int> s;
+        cin >> n;
+        s.push(n);
+        while(!s.empty()) {
+            
+        }
+    }
     return 0;
 }
