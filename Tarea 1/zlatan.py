@@ -2,7 +2,7 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem E - zlatan
-    Enero 23 de 2025
+    Enero 25 de 2025
 """
 
 from heapq import heappush, heappop
