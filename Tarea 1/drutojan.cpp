@@ -2,20 +2,21 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem B - drutojan
-    Enero 22 de 2025
+    Enero 24 de 2025
 */
 
 #include <iostream>
 #include <map>
 #include <vector>
+#include <queue>
 #include <string>
 
 using namespace std;
 
 struct Person {
     int timeSpent;
-    vector<string> namesList;
-    Person(vector<string> &list) {
+    queue<string> namesList;
+    Person(queue<string> &list) {
         timeSpent = 0;
         namesList = list;
     }
@@ -24,20 +25,20 @@ int main() {
     int cases, mins, arrivalTime, size, i, currCase = 1;
     string sitting, name;
     vector<string> names = {"Ja", "Sam", "Sha", "Sid", "Tan"};
-    Person *p;
-    while(cin >> cases) {
+    map<string, Person*> data;
+    Person* p;
+    cin >> cases;
+    while(cases--) {
         cin >> mins >> arrivalTime >> sitting;
-        map<string, Person*> data;
-        vector<string> tmp;
         for(i = 0; i < names.size(); i++) {
+            queue<string> tmp;
             cin >> size;
             for(int j = 0; j < size; j++) {
                 cin >> name;
-                tmp.push_back(name);
+                tmp.push(name);
             }
             p = new Person(tmp);
             data[names[i]] = p;
-            tmp.clear();
         }
         i = 0;
         while(i < arrivalTime) {
@@ -49,9 +50,9 @@ int main() {
             else {
                 p->timeSpent += mins-(i-arrivalTime);
             }
-            sitting = p->namesList[0];
-            p->namesList.erase(p->namesList.begin());
-            p->namesList.push_back(sitting);
+            sitting = p->namesList.front();
+            p->namesList.pop();
+            p->namesList.push(sitting);
             i += 2;
         }
         cout << "Case " << currCase << ':' << endl;

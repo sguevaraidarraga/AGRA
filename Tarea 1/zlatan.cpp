@@ -8,6 +8,8 @@
 #include <iostream>
 #include <map>
 #include <queue>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -29,12 +31,12 @@ struct Order {
         else if(a->serial != b->serial) {
             ans = a->serial < b->serial;
         }
-        else if(a->label != b->label) {
-            ans = a->label > b->label;
-        }
         return ans;
     }
 };
+bool lex(Card* &a, Card* &b) {
+    return a->label > b->label;
+}
 int main() {
     int n, m, serial;
     string label;
@@ -60,6 +62,7 @@ int main() {
             v.push_back(pq.top());
             pq.pop();
         }
+        sort(v.begin(), v.end(), lex);
         for(vector<Card*>::reverse_iterator jt = v.rbegin(); jt != v.rend(); jt++) {
             cout << (*jt)->label << ' ' << (*jt)->ocurrences << endl;
         }

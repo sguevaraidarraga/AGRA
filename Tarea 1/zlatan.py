@@ -18,8 +18,6 @@ class Card:
             ans = self.ocurrences > b.ocurrences
         elif self.serial != b.serial:
             ans = self.serial > b.serial
-        elif self.label != b.label:
-            ans = self.label > b.label
         return ans
 def main():
     n, m = map(int, input().split())
@@ -38,6 +36,7 @@ def main():
         while m != 0:
             v.append(heappop(pq))
             m -= 1
+        v.sort(key=lambda card: card.label, reverse=True)
         for i in reversed(v):
             print(f"{i.label} {i.ocurrences}")
         n, m = map(int, input().split())
