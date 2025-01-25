@@ -19,16 +19,18 @@ struct Card {
         serial = srl;
         ocurrences = 1;
     }
-    bool operator<(Card* &b) {
+};
+struct Order {
+    bool operator()(Card* &a, Card* &b) {
         bool ans = false;
-        if(ocurrences != b->ocurrences) {
-            ans = ocurrences < b->ocurrences;
+        if(a->ocurrences != b->ocurrences) {
+            ans = a->ocurrences < b->ocurrences;
         }
-        else if(serial != b->serial) {
-            ans = serial < b->serial;
+        else if(a->serial != b->serial) {
+            ans = a->serial < b->serial;
         }
-        else if(label != b->label) {
-            ans = label > b->label;
+        else if(a->label != b->label) {
+            ans = a->label > b->label;
         }
         return ans;
     }
@@ -37,9 +39,10 @@ int main() {
     int n, m, serial;
     string label;
     map<string, Card*> data;
+    vector<Card*> v;
     map<string, Card*>::iterator it;
     while(cin >> n >> m && n != 0 && m != 0) {
-        priority_queue<Card*> pq;
+        priority_queue <Card*, vector<Card*>, Order> pq;
         while(n--) {
             cin >> label >> serial;
             it = data.find(label);
@@ -54,10 +57,14 @@ int main() {
             pq.push(it->second);
         }
         for(int i = 0; i < m; i++) {
-            cout << pq.top()->label << ' ' << pq.top()->ocurrences << endl;
+            v.push_back(pq.top());
             pq.pop();
         }
+        for(vector<Card*>::reverse_iterator jt = v.rbegin(); jt != v.rend(); jt++) {
+            cout << (*jt)->label << ' ' << (*jt)->ocurrences << endl;
+        }
         data.clear();
+        v.clear();
     }
     return 0;
 }
