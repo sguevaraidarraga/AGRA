@@ -2,7 +2,7 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem D - cakey
-    Enero 25 de 2025
+    Enero 29 de 2025
 */
 
 #include <iostream>
@@ -10,16 +10,10 @@
 #include <map>
 #include <queue>
 
-#define PII pair<int, int>
-#define vI vector<int>
-#define vPII vector<PII>
-#define mII map<int, int>
-#define pqPII priority_queue <PII, vPII, Order>
-
 using namespace std;
 
 struct Order {
-    bool operator()(PII &a, PII &b) {
+    bool operator()(pair<int, int> &a, pair<int, int> &b) {
         bool ans = false;
         if(a.second != b.second) {
             ans = a.second < b.second;
@@ -32,11 +26,11 @@ struct Order {
 };
 int main() {
     int n, m, val;
-    mII data;
-    mII::iterator it;
+    map<int, int> data;
+    map<int, int>::iterator it;
     while(cin >> n >> m && n != 0 && m != 0) {
-        vI nVal(n), mVal(m);
-        pqPII pq;
+        vector<int> nVal(n), mVal(m);
+        priority_queue <pair<int, int>, vector<pair<int, int>>, Order> pq;
         for(int i = 0; i < n; i++) {
             cin >> val;
             nVal[i] = val;

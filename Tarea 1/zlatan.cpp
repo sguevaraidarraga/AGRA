@@ -2,7 +2,7 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem E - zlatan
-    Enero 25 de 2025
+    Enero 29 de 2025
 */
 
 #include <iostream>
@@ -21,38 +21,33 @@ struct Card {
         serial = srl;
         ocurrences = 1;
     }
-};
-struct Order {
-    bool operator()(Card* &a, Card* &b) {
+    bool operator<(const Card &b) const {
         bool ans = false;
-        if(a->ocurrences != b->ocurrences) {
-            ans = a->ocurrences < b->ocurrences;
+        if(ocurrences != b.ocurrences) {
+            ans = ocurrences < b.ocurrences;
         }
-        else if(a->serial != b->serial) {
-            ans = a->serial < b->serial;
+        else if(serial != b.serial) {
+            ans = serial < b.serial;
         }
         return ans;
     }
 };
-bool lex(Card* &a, Card* &b) {
-    return a->label > b->label;
-}
 int main() {
     int n, m, serial;
     string label;
-    map<string, Card*> data;
-    vector<Card*> v;
-    map<string, Card*>::iterator it;
+    map<string, Card> data;
+    vector<Card> v;
+    map<string, Card>::iterator it;
     while(cin >> n >> m && n != 0 && m != 0) {
-        priority_queue <Card*, vector<Card*>, Order> pq;
+        priority_queue<Card> pq;
         while(n--) {
             cin >> label >> serial;
             it = data.find(label);
             if(it != data.end()) {
-                it->second->ocurrences++;
+                it->second.ocurrences++;
             }
             else {
-                data[label] = new Card(label, serial);
+                data.insert({label, Card(label, serial)});
             }
         }
         for(it = data.begin(); it != data.end(); it++) {
@@ -62,9 +57,9 @@ int main() {
             v.push_back(pq.top());
             pq.pop();
         }
-        sort(v.begin(), v.end(), lex);
-        for(vector<Card*>::reverse_iterator jt = v.rbegin(); jt != v.rend(); jt++) {
-            cout << (*jt)->label << ' ' << (*jt)->ocurrences << endl;
+        sort(v.begin(), v.end(), [](const Card &a, const Card &b){return a.label < b.label;});
+        for(vector<Card>::iterator jt = v.begin(); jt != v.end(); jt++) {
+            cout << jt->label << ' ' << jt->ocurrences << endl;
         }
         data.clear();
         v.clear();

@@ -2,9 +2,10 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem E - zlatan
-    Enero 25 de 2025
+    Enero 29 de 2025
 """
 
+from sys import stdin
 from heapq import heappush, heappop
 
 class Card:
@@ -20,11 +21,11 @@ class Card:
             ans = self.serial > b.serial
         return ans
 def main():
-    n, m = map(int, input().split())
+    n, m = map(int, stdin.readline().split())
     while n != 0 and m != 0:
         dic, pq, v = {}, [], []
         while n != 0:
-            label, serial = input().split()
+            label, serial = stdin.readline().split()
             serial = int(serial)
             if label in dic:
                 dic[label].ocurrences += 1
@@ -36,8 +37,8 @@ def main():
         while m != 0:
             v.append(heappop(pq))
             m -= 1
-        v.sort(key=lambda card: card.label, reverse=True)
-        for i in reversed(v):
+        v.sort(key=lambda card: card.label)
+        for i in v:
             print(f"{i.label} {i.ocurrences}")
-        n, m = map(int, input().split())
+        n, m = map(int, stdin.readline().split())
 main()

@@ -2,9 +2,10 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem B - drutojan
-    Enero 25 de 2025
+    Enero 29 de 2025
 """
 
+from sys import stdin
 from collections import deque
 
 class Person:
@@ -14,15 +15,15 @@ class Person:
     def __str__(self):
         return f"{self.timeSpent}"
 def main():
-    cases = int(input())
+    cases = int(stdin.readline())
     names = ["Ja", "Sam", "Sha", "Sid", "Tan"]
     currCase = 1
     while cases:
         data = {}
-        mins, arrivalTime, sitting = input().split()
+        mins, arrivalTime, sitting = stdin.readline().split()
         mins, arrivalTime = int(mins), int(arrivalTime)
         for i in range(len(names)):
-            ln = deque(input().split())
+            ln = deque(stdin.readline().split())
             ln.popleft()
             p = Person(ln)
             data[names[i]] = p
