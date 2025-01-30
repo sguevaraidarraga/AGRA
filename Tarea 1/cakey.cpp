@@ -42,7 +42,7 @@ int main() {
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < m; j++) {
                 val = mVal[j] - nVal[i];
-                if(val > 0) {
+                if(val >= 0) {
                     it = data.find(val);
                     if(it != data.end()) {
                         it->second++;
