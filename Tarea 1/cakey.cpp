@@ -30,7 +30,7 @@ int main() {
     map<int, int>::iterator it;
     while(cin >> n >> m && n != 0 && m != 0) {
         vector<int> nVal(n), mVal(m);
-        priority_queue <pair<int, int>, vector<pair<int, int>>, Order> pq;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, Order> pq;
         for(int i = 0; i < n; i++) {
             cin >> val;
             nVal[i] = val;

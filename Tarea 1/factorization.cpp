@@ -13,55 +13,38 @@
 using namespace std;
 
 struct Triple {
-    int num, it;
+    int num;
     vector<int> factors;
     Triple(int n) {
         num = n;
-        it = 2;
         factors = vector<int>();
     }
     Triple(int n, vector<int> &v) {
         num = n;
-        it = 2;
         factors = v;
     }
 };
-bool inMat(vector<int> &v, vector<vector<int>> &m) {
-    bool ans = false;
-    for(int i = 0; i < m.size() && !ans; i++) {
-        if(m[i] == v) {
-            ans = true;
-        }
-    }
-    return ans;
-}
 vector<vector<int>> factorize(int k) {
-    int *n, *i;
-    stack<Triple*> s;
+    int n, i = 2;
+    stack<Triple> s;
     vector<vector<int>> ans;
-    s.push(new Triple(k));
+    s.push(Triple(k));
     Triple *t;
     while(!s.empty()) {
-        t = s.top(), n = &t->num, i = &t->it;
-        if((*i)<(*n)/2) {
-            if((*n)%(*i) == 0) {
-                vector<int> aux = s.top()->factors;
-                aux.push_back(*i);
-                if(*i < (*i)/(*n)) {
-                    s.push(new Triple(*i, aux));
-                }
-                else {
-                    s.push(new Triple((*n)/(*i), aux));
-                }
+        t = &s.top(), n = t->num;
+        if(i < n/i) {
+            if(n%i == 0) {
+                vector<int> aux = s.top().factors;
+                aux.push_back(i);
+                s.push(Triple(i/n, aux));
             }
-            (*i)++;
+            i++;
         }
         else {
-            if(k != (*n)) {
-                t->factors.push_back(*n);
+            if(k != n) {
+                t->factors.push_back(n);
                 ans.push_back(t->factors);
             }
-            delete t;
             s.pop();
         }
     }
