@@ -1,7 +1,7 @@
 """
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
-    Problem B - drutojan
+    Problem B: drutojan
     Enero 29 de 2025
 """
 

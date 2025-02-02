@@ -1,7 +1,7 @@
 /*
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
-    Problem D - cakey
+    Problem D: cakey
     Enero 30 de 2025
 */
 

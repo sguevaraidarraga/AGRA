@@ -1,7 +1,7 @@
 """
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
-    Problem E - zlatan
+    Problem E: zlatan
     Enero 29 de 2025
 """
 
