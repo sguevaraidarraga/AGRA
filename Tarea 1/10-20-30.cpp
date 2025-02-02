@@ -2,102 +2,103 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem A: 10-20-30
-    Febrero 1 de 2025
+    Febrero 2 de 2025
 */
 
 #include <iostream>
 #include <queue>
+#include <list>
 #include <deque>
+#include <set>
+#include <string>
 
 using namespace std;
 
 #define debug(x) cout << #x << ": " << x << endl
 
-bool check(deque<int> &s, int a, int b, int c){return (s[a]+s[b]+s[c] == 10 || s[a]+s[b]+s[c] == 20 || s[a]+s[b]+s[c] == 30);}
-void play(queue<int> &q, deque<int> &s) {
-    int n;
-    bool f = false;
-    while(s.size() >= 3 && !f) {
-        n = s.size();
-        if(check(s, 0, 1, n-1)) {
-            q.push(s[0]);
-            q.push(s[1]);
-            q.push(s[n-1]);
-            s.pop_front();
-            s.pop_front();
-            s.pop_back();
-        }
-        else if(check(s, 0, n-2, n-1)) {
-            q.push(s[0]);
-            q.push(s[n-2]);
-            q.push(s[n-1]);
-            s.pop_front();
-            s.pop_back();
-            s.pop_back();
-        }
-        else if(check(s, n-3, n-2, n-1)) {
-            q.push(s[n-3]);
-            q.push(s[n-2]);
-            q.push(s[n-1]);
-            s.pop_back();
-            s.pop_back();
-            s.pop_back();
-        }
-        else {
-            f = true;
-        }
-    }
-}
-void printQ(queue<int> q) {
-    while (!q.empty()) {
+void printQ(queue<int> &q) {
+    while(!q.empty()) {
         cout << q.front() << " ";
         q.pop();
     }
+    cout << endl;
 }
-void printV(vector<deque<int>> &v) {
-    for(int i = 0; i < v.size(); i++) {
-        for(int j = 0; j < v[i].size(); j++) {
-            cout << v[i][j] << " ";
+void printL(list<deque<int>> &l) {
+    for(list<deque<int>>::iterator it = l.begin(); it != l.end(); it++) {
+        cout << "[";
+        for(int j = 0; j < it->size(); j++) {
+            cout << (*it)[j];
+            if(j != it->size()-1) {
+                cout << ", ";
+            }
         }
-        cout << endl;
+        cout << "]" << endl;
     }
+    cout << endl;
 }
+string makeString(queue<int> &q) {
+    string ans(100, ' ');
+    string::iterator it = ans.begin();
+    while(!q.empty()) {
+        *it = q.front() + '0';
+        q.pop();
+        it += 2;
+    }
+    return ans;
+}
+bool check(deque<int> &s, int a, int b, int c){return (s[a]+s[b]+s[c] == 10 || s[a]+s[b]+s[c] == 20 || s[a]+s[b]+s[c] == 30);}
 int main() {
-    int v, steps;
-    bool f;
+    int v, i, counter;
+    bool f, f2;
+    list<deque<int>>::iterator it;
     while(cin >> v && v != 0) {
         queue<int> deck;
-        vector<deque<int>> game(7);
+        list<deque<int>> piles(7);
+        set<string> gameStates;
         deck.push(v);
-        for(int i = 1; i < 52; i++) {
+        for(i = 1; i < 52; i++) {
             cin >> v;
             deck.push(v);
         }
-        steps = 0;
-        for(int i = 0; i < 14; i++) {
-            (i < 7) ? v = i : v = i-7;
-            game[v].push_back(deck.front());
-            deck.pop();
-            steps++;
-        }
-        f = false;
-        while(game.size() != 0 && !f) {
-            for(int i = 0; i < game.size() && !f; i++) {
-                if(game[i].size() != 0) {
-                    game[i].push_back(deck.front());
-                    deck.pop();
-                    steps++;
-                    play(deck, game[i]);
-                    if(deck.size() == 52) {
-                        cout << "Win : " << steps << endl;
-                        f = true;
+        cout << makeString(deck) << endl;
+        i = 0;
+        counter = 0;
+        f2 = false;
+        while(!piles.empty()) {
+            it = piles.begin();
+            while(it != piles.end()) {
+                it->push_back(deck.front());
+                deck.pop();
+                counter++;
+                f = false;
+                while(it->size() >= 3 && !f) {
+                    if(check((*it), 0, 1, it->size()-1)) {
+                        deck.push((*it)[0]), deck.push((*it)[1]), deck.push((*it)[it->size()-1]);
+                        it->pop_front(), it->pop_front(), it->pop_back();
                     }
-                    else if(deck.empty()) {
-                        cout << "Loss: " << steps << endl;
+                    else if(check((*it), 0, it->size()-2, it->size()-1)) {
+                        deck.push((*it)[0]), deck.push((*it)[it->size()-2]), deck.push((*it)[it->size()-1]);
+                        it->pop_front(), it->pop_back(), it->pop_back();
+                    }
+                    else if(check((*it), it->size()-3, it->size()-2, it->size()-1)) {
+                        deck.push((*it)[it->size()-3]), deck.push((*it)[it->size()-2]), deck.push((*it)[it->size()-1]);
+                        it->pop_back(), it->pop_back(), it->pop_back();
+                    }
+                    else {
                         f = true;
                     }
                 }
+                (it->empty()) ? it = piles.erase(it) : it++;
+                if(piles.empty()) {
+                    cout << "Win : " << counter << endl;
+                    f2 = true;
+                }
+                else if(deck.empty()) {
+                    cout << "Loss: " << counter << endl;
+                    f2 = true;
+                }
             }
+            i++;
         }
     }
     return 0;
