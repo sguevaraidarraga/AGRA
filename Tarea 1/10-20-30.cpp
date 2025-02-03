@@ -14,59 +14,56 @@
 
 using namespace std;
 
-#define debug(x) cout << #x << ": " << x << endl
-
-void printQ(queue<int> &q) {
+string makeString(queue<int> q, list<deque<int>> &l) {
+    string ans(1000, ' ');
+    string::iterator ct = ans.begin();
     while(!q.empty()) {
-        cout << q.front() << " ";
-        q.pop();
-    }
-    cout << endl;
-}
-void printL(list<deque<int>> &l) {
-    for(list<deque<int>>::iterator it = l.begin(); it != l.end(); it++) {
-        cout << "[";
-        for(int j = 0; j < it->size(); j++) {
-            cout << (*it)[j];
-            if(j != it->size()-1) {
-                cout << ", ";
-            }
+        if(q.front() != 10) {
+            *ct = q.front() + '0';
         }
-        cout << "]" << endl;
-    }
-    cout << endl;
-}
-string makeString(queue<int> &q) {
-    string ans(100, ' ');
-    string::iterator it = ans.begin();
-    while(!q.empty()) {
-        *it = q.front() + '0';
+        else {
+            *ct = '1';
+            *(++ct) = '0';
+        }
         q.pop();
-        it += 2;
+        ct += 2;
+    }
+    *(++ct) = '|';
+    ct+=2;
+    for(list<deque<int>>::iterator it = l.begin(); it != l.end(); it++) {
+        for(deque<int>::iterator jt = it->begin(); jt != it->end(); jt++) {
+            if(*jt == 10) {
+                *ct = '1';
+                *(++ct) = '0';
+            }
+            else {
+                *ct = *jt + '0';
+            }
+            ct += 2;
+        }
     }
     return ans;
 }
 bool check(deque<int> &s, int a, int b, int c){return (s[a]+s[b]+s[c] == 10 || s[a]+s[b]+s[c] == 20 || s[a]+s[b]+s[c] == 30);}
 int main() {
-    int v, i, counter;
+    int v, counter;
     bool f, f2;
+    string currState;
     list<deque<int>>::iterator it;
     while(cin >> v && v != 0) {
         queue<int> deck;
         list<deque<int>> piles(7);
         set<string> gameStates;
         deck.push(v);
-        for(i = 1; i < 52; i++) {
+        for(int i = 1; i < 52; i++) {
             cin >> v;
             deck.push(v);
         }
-        cout << makeString(deck) << endl;
-        i = 0;
         counter = 0;
         f2 = false;
-        while(!piles.empty()) {
+        while(!piles.empty() && !f2) {
             it = piles.begin();
-            while(it != piles.end()) {
+            while(it != piles.end() && !f2) {
                 it->push_back(deck.front());
                 deck.pop();
                 counter++;
@@ -89,7 +86,8 @@ int main() {
                     }
                 }
                 (it->empty()) ? it = piles.erase(it) : it++;
-                if(piles.empty()) {
+                currState = makeString(deck, piles);
+                if(piles.empty() && deck.size() == 52) {
                     cout << "Win : " << counter << endl;
                     f2 = true;
                 }
@@ -97,8 +95,14 @@ int main() {
                     cout << "Loss: " << counter << endl;
                     f2 = true;
                 }
+                else if(gameStates.count(currState)) {
+                    cout << "Draw: " << counter << endl;
+                    f2 = true;
+                }
+                else {
+                    gameStates.insert(currState);
+                }
             }
-            i++;
         }
     }
     return 0;
