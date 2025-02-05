@@ -13,7 +13,7 @@ int main() {
     int T, AB, AC, BC, rADE;
     cin >> T;
     while(T--) {
-
+        
     }
     return 0;
 }
