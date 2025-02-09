@@ -36,6 +36,10 @@ void printBM(vector<vector<char>> &bm) {
         cout << ']' << endl;
     }
 }
+int decompose(vector<vector<char>> &bm, int rows, int columns) {
+    
+    return 0;
+}
 int main() {
     char c, v;
     int rows, columns;
@@ -49,6 +53,7 @@ int main() {
             }
         }
         printBM(bitmap);
+        printf("%c %4d %4d", (c == 'B' ? 'D' : 'B'), rows, columns);
     }
     return 0;
 }
