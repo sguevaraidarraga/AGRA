@@ -36,23 +36,37 @@ void printBM(vector<vector<char>> &bm) {
         cout << ']' << endl;
     }
 }
-int decompose(vector<vector<char>> &bm, int rows, int columns) {
-    
-    return 0;
+void BtoD(vector<vector<char>> &bm, int n1, int n2, int m1, int m2) {
+    int mid1 = (n1+n2)/2, mid2 = (m1+m2)/2;
+    cout << "rows: " << mid1 << endl;
+    cout << "columns: " << mid2 << endl;
+    cout << (mid1 != 1 && mid2 != 1) << endl;
+    if(mid1 != 1 && mid2 != 1) {
+        BtoD(bm, 0, mid1, 0, mid2);
+        BtoD(bm, mid1, n2, mid2, m2);
+        BtoD(bm, 0, mid1, 0, mid2);
+        BtoD(bm, mid1, n2, mid2, m2);
+    }
 }
 int main() {
-    char c, v;
+    char v, c;
     int rows, columns;
     while(cin >> c && c != '#') {
         cin >> rows >> columns;
-        vector<vector<char>> bitmap(rows, vector<char>(columns));
-        for(int i = 0; i < bitmap.size(); i++) {
-            for(int j = 0; j < bitmap[i].size(); j++) {
-                cin >> v;
-                bitmap[i][j] = v;
+        if(c == 'B') {
+            vector<vector<char>> bitmap(rows, vector<char>(columns));
+            for(int i = 0; i < bitmap.size(); i++) {
+                for(int j = 0; j < bitmap[i].size(); j++) {
+                    cin >> v;
+                    bitmap[i][j] = v;
+                }
             }
+            printBM(bitmap);
+            BtoD(bitmap, 0, rows, 0, columns);
         }
-        printBM(bitmap);
+        else if(c == 'D') {
+
+        }
         printf("%c %4d %4d", (c == 'B' ? 'D' : 'B'), rows, columns);
     }
     return 0;
