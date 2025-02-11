@@ -2,36 +2,36 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem B: triangle
-    Febrero 4 de 2025
+    Febrero 10 de 2025
 */
 
 #include <iostream>
 #include <cmath>
+#include <iomanip>
 
 using namespace std;
 
-#define debug(x) cout << #x << ": " << x << endl
-
-void solve(double AB, double ratio) {
-    // AD - AB * sqrt(ratio/(1+ratio))
-    double low = 0, high = AB, mid;
+long double solve(long double AB, long double ratio) {
+    long double low = 0, high = AB, mid, c = AB*pow(ratio / (1.0L + ratio), 1/2);
     while(high-low > 1e-6) {
         mid = (low + high)/2;
-        if(low*mid < 0) {
-            mid = low;
+        if(mid < c) {
+            low = mid;
         }
-        else if(high*mid < 0) {
-            mid = high;
+        else {
+            high = mid;
         }
     }
-    cout << mid << endl;
+    cout << fixed << setprecision(6) << AB*pow(ratio / (1.0L + ratio), 1/2) << endl;
+    return mid;
 }
 int main() {
-    int T, AB, AC, BC, ratio;
+    int T, AB, AC, BC, ratio, k = 1;
     cin >> T;
     while(T--) {
         cin >> AB >> AC >> BC >> ratio;
-        solve(AB, ratio);
+        cout << fixed << setprecision(6) << solve(AB, ratio) << endl;
+        k++;
     }
     return 0;
 }
