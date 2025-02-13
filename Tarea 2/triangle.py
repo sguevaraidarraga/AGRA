@@ -2,7 +2,7 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem B: triangle
-    Febrero 10 de 2025
+    Febrero 13 de 2025
 """
 
 from sys import stdin
@@ -10,10 +10,10 @@ from math import sqrt
 
 def solve(ab, ratio):
     low, high = 0, ab
-    c = ab*sqrt(ratio/(1+ratio))
     while high-low > 10**-10:
         mid = (low+high)/2
-        if mid < c:
+        r = mid**2 / (ab**2 - mid**2)
+        if r < ratio:
             low = mid
         else:
             high = mid
