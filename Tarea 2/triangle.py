@@ -2,11 +2,11 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem B: triangle
-    Febrero 13 de 2025
+    Complejidad: Log n
+    Febrero 14 de 2025
 """
 
 from sys import stdin
-from math import sqrt
 
 def solve(ab, ratio):
     low, high = 0, ab
