@@ -45,7 +45,7 @@ int BtoD(vector<vector<int>> &bm, int low1, int high1, int low2, int high2, int 
     debug(low2), debug(mid2), debug(high2);
     printBM(bm, low1, high1, low2, high2);
     debug((low1 == high1 && low2 == high2));
-    if(low1 == high1 && low2 == high2) {
+    if(low1 == high1 || low2 == high2) {
         ans = bm[low1][low2];
         debug(ans);
         f = true;
