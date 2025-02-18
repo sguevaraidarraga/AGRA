@@ -13,62 +13,66 @@ using namespace std;
 
 #define debug(x) cout << #x << ": " << x << endl
 
-void printVec(vector<int> &v, int s, int e) {
-    cout << "Vector: [";
-    for(int i = s; i <= e; i++) {
-        cout << v[i];
-        if(i != e) {
-            cout << ", ";
-        }
-    }
-    cout << ']' << endl;
-}
-void solve(vector<int> &weights, vector<int> &racks) {
-    int last, cnt, low = 0, high = weights.size()-1, mid;
-    bool f;
-    while(low < high) {
-        //printVec(weights, low, high);
-        mid = (low+high)/2;
-        last = 0, cnt = 0,  f = true;
-        for(int i = 0; i < racks.size() && f; i++) {
-            if(racks[i] > weights[mid]) {
-                if(racks[i] != last) {
-                    last = racks[i];
-                    cnt = 1;
-                }
-                else if(cnt < 2) {
-                    cnt++;
-                }
-                else {
-                    f = false;
-                }
+bool organize(vector<int> &w, vector<int> &r1, vector<int> &r2, int mid) {
+    int l1 = -1, l2 = -1, cnt1 = 0, cnt2 = 0;
+    bool f = true;
+    for(int i = 0; i < r1.size() && f; i++) {
+        if(r1[i] > w[mid]) {
+            if(r1[i] != l1 && (cnt1 == 0 || cnt1 == 2)) {
+                l1 = r1[i];
+                cnt1 = 1;
+            }
+            else if(cnt1 < 2) {
+                cnt1++;
+            }
+            else {
+                f = false;
             }
         }
-        if(f) {
+        if(r2[i] > w[mid]) {
+            if(r2[i] != l2 && (cnt2 == 0 || cnt2 == 2)) {
+                l2 = r2[i];
+                cnt2 = 1;
+            }
+            else if(cnt2 < 2) {
+                cnt2++;
+            }
+            else {
+                f = false;
+            }
+        }
+    }
+    return f;
+}
+void solve(vector<int> &w, vector<int> &r1, vector<int> &r2) {
+    int low = 0, high = w.size()-1, mid;
+    while(low < high) {
+        mid = (low+high)/2;
+        if(organize(w, r1, r2, mid)) {
             high = mid;
         }
         else {
             low = mid+1;
         }
     }
-    cout << weights[low] << endl;
+    cout << w[low] << endl;
 }
 int main() {
-    int n, v;
+    int n;
     while(cin >> n) {
         set<int> s;
-        vector<int> racks(2*n), weights;
+        vector<int> rack1(n), rack2(n);
         s.insert(0);
-        for(int i = 0; i < racks.size(); i++) {
-            cin >> v;
-            racks[i] = v;
-            s.insert(v);
+        for(int i = 0; i < n; i++) {
+            cin >> rack1[i];
+            s.insert(rack1[i]);
         }
-        for(set<int>::iterator it = s.begin(); it != s.end(); it++) {
-            weights.push_back(*it);
+        for(int i = 0; i < n; i++) {
+            cin >> rack2[i];
+            s.insert(rack2[i]);
         }
-        //printVec(l, 0, l.size()-1);
-        solve(weights, racks);
+        vector<int> weights(s.begin(), s.end());
+        solve(weights, rack1, rack2);
     }
     return 0;
 }

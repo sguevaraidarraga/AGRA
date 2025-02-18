@@ -7,16 +7,35 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include <cmath>
 
 using namespace std;
 
 #define debug(x) cout << #x << ": " << x
 
+void printLine(string &s) {
+    int cnt = 0;
+    for(int i = 0; i < s.size(); i++) {
+        if(cnt == 50) {
+            cout << endl;
+            cnt = 0;
+        }
+        cout << s[i];
+        cnt++;
+    }
+    cout << endl;
+}
 void printMat(vector<vector<char>> &m) {
+    int cnt = 0;
     for(int i = 0; i < m.size(); i++) {
         for(int j = 0; j < m[i].size(); j++) {
+            if(cnt == 50) {
+                cout << endl;
+                cnt = 0;
+            }
             cout << m[i][j];
+            cnt++;
         }
     }
     cout << endl;
@@ -76,26 +95,35 @@ void DtoB(string &s, vector<vector<char>> &b, int i, int j, int n, int m, int &d
 }
 int main() {
     int rows, columns, i;
-    char c, v;
-    string l;
-    while(cin >> c && c != '#') {
+    char c, no;
+    bool f;
+    cin >> c;
+    while(c != '#') {
         cin >> rows >> columns;
+        string l;
+        f = false;
+        (c == 'D' ? no = 'D' : no = '\0');
+        while(cin >> c) {
+            if(c != '#' || c != no) {
+                l += c;
+                f = true;
+            }
+        }
         vector<vector<char>> bitmap(rows, vector<char>(columns));
-        printf("%c %4d %4d\n", (c == 'B' ? 'D' : 'B'), rows, columns);
+        printf("%c %3d %3d\n", (c == 'B' ? 'D' : 'B'), rows, columns);
         if(c == 'B') {
-            for(int i = 0; i < bitmap.size(); i++) {
-                for(int j = 0; j < bitmap[i].size(); j++) {
-                    cin >> v;
-                    bitmap[i][j] = v;
+            i = 0;
+            for(int j = 0; j < rows; j++) {
+                for(int k = 0; k < columns; k++) {
+                    bitmap[j][k] = l[i];
+                    i++;
                 }
             }
-            cout << BtoD(bitmap, 0, 0, rows, columns) << endl;
+            l = BtoD(bitmap, 0, 0, rows, columns);
+            printLine(l);
         }
         else if(c == 'D') {
-            cin.ignore();
-            getline(cin, l);
-            i = 0;
-            DtoB(l, bitmap, 0, 0, rows, columns, i);
+            DtoB(l, bitmap, 0, 0, rows, columns, i = 0);
             printMat(bitmap);
         }
     }
