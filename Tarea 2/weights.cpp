@@ -1,7 +1,7 @@
 /*
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
-    Problem B: bit
+    Problem C: weights
     Febrero 14 de 2025
 */
 
@@ -32,7 +32,7 @@ void solve(vector<int> &weights, vector<int> &racks) {
         last = 0, cnt = 0,  f = true;
         for(int i = 0; i < racks.size() && f; i++) {
             if(racks[i] > weights[mid]) {
-                if(racks[i] != last && (cnt == 0 || cnt == 2)) {
+                if(racks[i] != last) {
                     last = racks[i];
                     cnt = 1;
                 }
