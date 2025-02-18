@@ -14,35 +14,33 @@ using namespace std;
 #define debug(x) cout << #x << ": " << x << endl
 
 bool organize(vector<int> &w, vector<int> &r1, vector<int> &r2, int mid) {
-    int l1 = -1, l2 = -1, cnt1 = 0, cnt2 = 0;
+    int lst1 = 0, lst2 = 0;
     bool f = true;
     for(int i = 0; i < r1.size() && f; i++) {
         if(r1[i] > w[mid]) {
-            if(r1[i] != l1 && (cnt1 == 0 || cnt1 == 2)) {
-                l1 = r1[i];
-                cnt1 = 1;
+            if(lst1 == 0) {
+                lst1 = r1[i];
             }
-            else if(cnt1 < 2) {
-                cnt1++;
+            else if(lst1 == r1[i]) {
+                lst1 = 0;
             }
             else {
                 f = false;
             }
         }
         if(r2[i] > w[mid]) {
-            if(r2[i] != l2 && (cnt2 == 0 || cnt2 == 2)) {
-                l2 = r2[i];
-                cnt2 = 1;
+            if(lst2 == 0) {
+                lst2 = r2[i];
             }
-            else if(cnt2 < 2) {
-                cnt2++;
+            else if(lst2 == r2[i]) {
+                lst2 = 0;
             }
             else {
                 f = false;
             }
         }
     }
-    return f;
+    return f && lst1 == 0 && lst2 == 0;
 }
 void solve(vector<int> &w, vector<int> &r1, vector<int> &r2) {
     int low = 0, high = w.size()-1, mid;
