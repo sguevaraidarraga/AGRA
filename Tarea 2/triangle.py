@@ -2,8 +2,8 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem B: triangle
-    Complejidad: Log n
-    Febrero 14 de 2025
+    Complejidad: O(Log n) donde n = ab/10**-10
+    Febrero 18 de 2025
 """
 
 from sys import stdin

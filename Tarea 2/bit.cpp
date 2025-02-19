@@ -2,7 +2,8 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem B: bit
-    Febrero 5 de 2025
+    Complejidad: O(Log n) donde n = ab/10**-10
+    Febrero 18 de 2025
 */
 
 #include <iostream>

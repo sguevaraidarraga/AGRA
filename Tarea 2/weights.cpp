@@ -2,7 +2,8 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem C: weights
-    Febrero 14 de 2025
+    Complejidad: O(Log n) donde n = ab/10**-10
+    Febrero 18 de 2025
 */
 
 #include <iostream>
@@ -11,33 +12,18 @@
 
 using namespace std;
 
-#define debug(x) cout << #x << ": " << x << endl
-
 bool organize(vector<int> &w, vector<int> &r1, vector<int> &r2, int mid) {
     int lst1 = 0, lst2 = 0;
     bool f = true;
     for(int i = 0; i < r1.size() && f; i++) {
         if(r1[i] > w[mid]) {
-            if(lst1 == 0) {
-                lst1 = r1[i];
-            }
-            else if(lst1 == r1[i]) {
-                lst1 = 0;
-            }
-            else {
-                f = false;
-            }
+            lst1 = (lst1 == 0) ? r1[i] : (lst1 == r1[i]) ? 0 : -1;
         }
         if(r2[i] > w[mid]) {
-            if(lst2 == 0) {
-                lst2 = r2[i];
-            }
-            else if(lst2 == r2[i]) {
-                lst2 = 0;
-            }
-            else {
-                f = false;
-            }
+            lst2 = (lst2 == 0) ? r2[i] : (lst2 == r2[i]) ? 0 : -1;
+        }
+        if(lst1 == -1 || lst2 == -1) {
+            f = false;
         }
     }
     return f && lst1 == 0 && lst2 == 0;
