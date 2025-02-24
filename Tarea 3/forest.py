@@ -2,17 +2,20 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem B: forest
-    Febrero 20 de 2025
+    Febrero 24 de 2025
 """
 
 from sys import stdin
 from collections import deque
 from heapq import heappush, heappop
 
+directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
 class Tree:
     def __init__(self, specie, height):
         self.specie = specie
         self.height = height
+        self.visited = False
     def __lt__(self, b):
         ans = False
         if self.specie != b.specie:
@@ -20,23 +23,32 @@ class Tree:
         elif self.height != b.height:
             ans = self.height < b.height
         return ans
-def bfs(i, j, forest, visited):
+    def __str__(self):
+        return f"({self.specie}, {self.height}, {self.visited})"
+    def __repr__(self):
+        return self.__str__()
+def bfsAux(g, x, y):
+	ans = g[x][y].height
 	q = deque()
-	q.append(i)
-	visited[i] = True
+	q.append((x, y))
+	g[x][y].visited = True
 	while len(q) != 0:
-		top = q.popleft()
-		for k in forest[top]:
-			if not visited[i][k]:
-				visited[i][k] = True
-				q.append(j)
-def search(forest):
-	n, m = len(forest), len(forest[0])
-	visited = [[False for _ in range(m)] for _ in range(n)]
-	for i in range(n):
-		for j in range(m):
-			if not visited[i][j]:
-				bfs(i, j, forest, visited)
+		i, j = q.popleft()
+		#print(g[i][j])
+		for dx, dy in directions:
+			nx, ny = i + dx, j + dy
+			#print(nx, ny)
+			if 0 <= nx < len(g) and 0 <= ny < len(g[0]) and g[nx][ny].specie == g[x][y].specie and not g[nx][ny].visited:
+				q.append((nx, ny))
+				g[nx][ny].visited = True
+				ans = max(ans, g[nx][ny].height)
+	return ans
+def bfs(g):
+	for i in range(len(g)):
+		for j in range(len(g[0])):
+			if not g[i][j].visited:
+				ans = bfsAux(g, i, j)
+				print(f"{g[i][j].specie} {ans}")
 def main():
 	cases = int(stdin.readline())
 	currCase = 1
@@ -52,6 +64,8 @@ def main():
 				tmp.append(Tree(specie, height))
 			forest.append(tmp)
 		print(f"Forest #{currCase}")
+		bfs(forest)
+		print(forest)
 		currCase += 1
 		cases -= 1
 main()
