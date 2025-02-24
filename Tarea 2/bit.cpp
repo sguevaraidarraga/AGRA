@@ -9,11 +9,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <cmath>
 
 using namespace std;
-
-#define debug(x) cout << #x << ": " << x
 
 void printLine(string &s) {
     int cnt = 0;
@@ -46,87 +43,88 @@ string BtoD(vector<vector<char>> &b, int i, int j, int n, int m) {
     if(n == 1 && m == 1) {
         ans = b[i][j];
     }
-    else if(n == 1 && m != 1) {
-        string s1 = BtoD(b, i, j, n, ceil(m/2.0));
-        string s2 = BtoD(b, i, j+ceil(m/2.0), n, floor(m/2.0));
-        (s1 == s2) ? ans = s1 : ans = 'D' + s1 + s2;
-    }
-    else if(n != 1 && m == 1) {
-        string s1 = BtoD(b, i, j, ceil(n/2.0), m);
-        string s2 = BtoD(b, i+ceil(n/2.0), j, floor(n/2.0), m);
-        (s1 == s2) ? ans = s1 : ans = 'D' + s1 + s2;
-    }
     else {
-        string s1 = BtoD(b, i, j, ceil(n/2.0), ceil(m/2.0));
-        string s2 = BtoD(b, i, j+ceil(m/2.0), ceil(n/2.0), floor(m/2.0));
-        string s3 = BtoD(b, i+ceil(n/2.0), j, floor(n/2.0), ceil(m/2.0));
-        string s4 = BtoD(b, i+ceil(n/2.0), j+ceil(m/2.0), floor(n/2.0), floor(m/2.0));
-        (s1 == s2 && s2 == s3 && s3 == s4) ? ans = s1 : ans = 'D' + s1 + s2 + s3 + s4;
+        string tl, tr, bl, br;
+        int ceilN = (n+1)/2, floorN = n/2, ceilM = (m+1)/2, floorM = m/2;
+        if(n == 1 && m != 1) {
+            tl = BtoD(b, i, j, n, ceilM);
+            tr = BtoD(b, i, j+ceilM, n, floorM);
+            ans = (tl == tr) ? tl : 'D' + tl + tr;
+        }
+        else if(n != 1 && m == 1) {
+            tl = BtoD(b, i, j, ceilN, m);
+            bl = BtoD(b, i+ceilN, j, floorN, m);
+            ans = (tl == bl) ? tl : 'D' + tl + bl;
+        }
+        else {
+            tl = BtoD(b, i, j, ceilN, ceilM);
+            tr = BtoD(b, i, j+ceilM, ceilN, floorM);
+            bl = BtoD(b, i+ceilN, j, floorN, ceilM);
+            br = BtoD(b, i+ceilN, j+ceilM, floorN, floorM);
+            ans = (tl == tr && tr == bl && bl == br && br == tl) ? tl : 'D' + tl + tr + bl + br;
+        }
     }
     return ans;
 }
 void DtoB(string &s, vector<vector<char>> &b, int i, int j, int n, int m, int &d) {
-    if(d < s.size()) {
-        if(s[d] == 'D') {
+    int ceilN = (n+1)/2, floorN = n/2, ceilM = (m+1)/2, floorM = m/2;
+    if(s[d] == 'D') {
+        if(d < s.size()) {
             d++;
             if(n == 1 && m != 1) {
-                DtoB(s, b, i, j, n, ceil(m/2.0), d);
-                DtoB(s, b, i, j+ceil(m/2.0), n, floor(m/2.0), d);
+                DtoB(s, b, i, j, n, ceilM, d);
+                DtoB(s, b, i, j+ceilM, n, floorM, d);
             }
             else if(n != 1 && m == 1) {
-                DtoB(s, b, i, j, ceil(n/2.0), m, d);
-                DtoB(s, b, i+ceil(n/2.0), j, floor(n/2.0), m, d);
+                DtoB(s, b, i, j, ceilN, m, d);
+                DtoB(s, b, i+ceilN, j, floorN, m, d);
             }
             else {
-                DtoB(s, b, i, j, ceil(n/2.0), ceil(m/2.0), d);
-                DtoB(s, b, i, j+ceil(m/2.0), ceil(n/2.0), floor(m/2.0), d);
-                DtoB(s, b, i+ceil(n/2.0), j, floor(n/2.0), ceil(m/2.0), d);
-                DtoB(s, b, i+ceil(n/2.0), j+ceil(m/2.0), floor(n/2.0), floor(m/2.0), d);
+                DtoB(s, b, i, j, ceilN, ceilM, d);
+                DtoB(s, b, i, j+ceilM, ceilN, floorM, d);
+                DtoB(s, b, i+ceilN, j, floorN, ceilM, d);
+                DtoB(s, b, i+ceilN, j+ceilM, floorN, floorM, d);
             }
         }
-        else {
-            for(int a = i; a < n+i; a++) {
-                for(int k = j; k < m+j; k++) {
-                    b[a][k] = s[d];
-                }
+    }
+    else {
+        for(int a = i; a < n+i; a++) {
+            for(int k = j; k < m+j; k++) {
+                b[a][k] = s[d];
             }
-            d++;
         }
+        d++;
     }
 }
 int main() {
     int rows, columns, i;
-    char c, no;
-    bool f;
-    cin >> c;
-    while(c != '#') {
-        cin >> rows >> columns;
-        string l;
-        f = false;
-        (c == 'D' ? no = 'D' : no = '\0');
-        while(cin >> c) {
-            if(c != '#' || c != no) {
-                l += c;
-                f = true;
-            }
+    string cmd;
+    cin >> cmd;
+    while(cmd != "#") {
+        string s, l, ans;
+        cin >> rows >> columns >> l;
+        while(l != "D" && l != "B" && l != "#") {
+            s += l;
+            cin >> l;
         }
         vector<vector<char>> bitmap(rows, vector<char>(columns));
-        printf("%c %3d %3d\n", (c == 'B' ? 'D' : 'B'), rows, columns);
-        if(c == 'B') {
+        printf("%c %3d %3d\n", (cmd[0] == 'B' ? 'D' : 'B'), rows, columns);
+        if(cmd[0] == 'B') {
             i = 0;
             for(int j = 0; j < rows; j++) {
                 for(int k = 0; k < columns; k++) {
-                    bitmap[j][k] = l[i];
+                    bitmap[j][k] = s[i];
                     i++;
                 }
             }
-            l = BtoD(bitmap, 0, 0, rows, columns);
-            printLine(l);
+            ans = BtoD(bitmap, 0, 0, rows, columns);
+            printLine(ans);
         }
-        else if(c == 'D') {
-            DtoB(l, bitmap, 0, 0, rows, columns, i = 0);
+        else if(cmd[0] == 'D') {
+            DtoB(s, bitmap, 0, 0, rows, columns, i = 0);
             printMat(bitmap);
         }
+        cmd = l;
     }
     return 0;
 }
