@@ -8,8 +8,6 @@
 from sys import stdin
 from collections import deque
 
-# Shipment cost = (size of the shipment) * (# of shipping legs required)
-
 def bfs(g, a, b):
     vis = [False for _ in range(len(g))]
     q = deque()
