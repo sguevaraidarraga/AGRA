@@ -1,6 +1,8 @@
 .vscode/
 _samples/
 samples/
+test.py
+test.cpp
 *.exe
 *.txt
 *.in
