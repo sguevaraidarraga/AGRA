@@ -29,15 +29,15 @@ int main() {
     cin >> cases;
     while(cases--) {
         cin >> n >> m;
+        map<string, int> mp;
         vector<Coach> g(n);
         for(int i = 0; i < n; i++) {
             cin >> a >> y;
-            mp[a] = make_pair(i, y);
+            mp[a] = i;
         }
         while(m--) {
             cin >> a >> b;
-            c1 = mp[a].first, c2 = mp[b].first;
-            g[c1].
+            c1 = mp[a], c2 = mp[b];
         }
     }
     return 0;
