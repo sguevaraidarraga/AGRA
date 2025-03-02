@@ -61,6 +61,7 @@ int bfs() {
                 }
             }
         }
+        fill(vis.begin(), vis.end(), false);
     }
     return ans;
 }
@@ -77,7 +78,7 @@ int main() {
             F[getIndx(tmp)] = true;
         }
         cout << bfs() << endl;
-        F.clear();
+        fill(F.begin(), F.end(), false);
     }
     return 0;
 }
