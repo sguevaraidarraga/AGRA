@@ -2,18 +2,19 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem A: zlatan
+    Complejidad: O(10^4) debido a que hay 4 ruedas y cada una tiene 10 numeros posibles
     Marzo 2 de 2025
 */
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <queue>
 
 using namespace std;
 
 string S(4, '#');
 string T(4, '#');
-vector<bool> F(10000, false);
 vector<bool> vis(10000, false);
 int dir[] = {1, -1};
 
@@ -25,15 +26,13 @@ char sum(char c, int k) {
 }
 int getIndx(string &s) {
     int ans = 0;
-    for(int i = 0; i < s.size(); i++) {
-        ans = ans*10 + (s[i]-'0');
-    }
+    for(int i = 0; i < s.size(); i++) ans = ans*10 + (s[i]-'0');
     return ans;
 }
 int bfs() {
     int ans = -1;
     int s = getIndx(S);
-    if(!F[s]) {
+    if(!vis[s]) {
         int d;
         string cs, ns;
         queue<pair<string, int>> q;
@@ -53,7 +52,7 @@ int bfs() {
                         ns = cs;
                         ns[i] = sum(cs[i], dir[j]);
                         s = getIndx(ns);
-                        if(!vis[s] && !F[s]) {
+                        if(!vis[s]) {
                             vis[s] = true;
                             q.push({ns, d+1});
                         }
@@ -61,7 +60,6 @@ int bfs() {
                 }
             }
         }
-        fill(vis.begin(), vis.end(), false);
     }
     return ans;
 }
@@ -75,10 +73,10 @@ int main() {
         cin >> n;
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < 4; j++) cin >> tmp[j];
-            F[getIndx(tmp)] = true;
+            vis[getIndx(tmp)] = true;
         }
         cout << bfs() << endl;
-        fill(F.begin(), F.end(), false);
+        fill(vis.begin(), vis.end(), false);
     }
     return 0;
 }
