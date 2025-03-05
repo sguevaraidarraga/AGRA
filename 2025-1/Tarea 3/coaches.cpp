@@ -2,7 +2,7 @@
     Arboles y Grafos 2025-1
     Santiago Guevara Idarraga
     Problem A: coaches
-    Complejidad: O(n + m)
+    Complejidad: O(nlog n + m)
     Marzo 3 de 2025
 */
 
