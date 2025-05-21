@@ -23,13 +23,13 @@ int n;
 struct Triple {
     int first, second, third;
     Triple(int f, int s, int t) : first(f), second(s), third(t) {}
-    bool operator<(const Triple &b) const {return second > b.second;}
+    bool operator>(const Triple &b) const {return second > b.second;}
 };
 int dijkstra(vector<vector<pair<int, int>>> &g, vector<int> &salary, int s, int e, int k) {
     int ans = UNVISITED, at, days, money, to, ticket;
     bool f = false;
     vector<vector<int>> dist(n+1, vector<int>(MAX_DAYS, UNVISITED));
-    priority_queue<Triple> pq;
+    priority_queue<Triple, vector<Triple>, greater<Triple>> pq;
     pq.push({k, 0, s});
     dist[s][0] = k;
     while(!pq.empty() && !f) {
