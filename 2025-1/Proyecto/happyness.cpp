@@ -10,10 +10,8 @@
 #include <vector>
 #include <queue>
 
-#define MAX_CITIES 801
 #define MAX_DAYS 10000
 #define UNVISITED -1
-#define INF 1e9
 
 #define debug(x) cout << #x << ": " << endl
 
