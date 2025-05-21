@@ -13,6 +13,7 @@
 #define MAX_CITIES 801
 #define MAX_DAYS 10000
 #define UNVISITED -1
+#define INF 1e9
 
 #define debug(x) cout << #x << ": " << endl
 
@@ -23,32 +24,41 @@ int n;
 struct Triple {
     int first, second, third;
     Triple(int f, int s, int t) : first(f), second(s), third(t) {}
-    bool operator>(const Triple &b) const {return second > b.second;}
+    bool operator<(const Triple &b) const {
+        bool ans = false;
+        if(first != b.first) {
+            ans = first > b.first;
+        }
+        else if(second != b.second) {
+            ans = second < b.second;
+        }
+        return ans;
+    }
 };
 int dijkstra(vector<vector<pair<int, int>>> &g, vector<int> &salary, int s, int e, int k) {
     int ans = UNVISITED, at, days, money, to, ticket;
     bool f = false;
-    vector<vector<int>> dist(n+1, vector<int>(MAX_DAYS, UNVISITED));
-    priority_queue<Triple, vector<Triple>, greater<Triple>> pq;
-    pq.push({k, 0, s});
-    dist[s][0] = k;
+    vector<pair<int, int>> dist(n+1, {MAX_DAYS, UNVISITED});
+    priority_queue<Triple> pq;
+    pq.push({0, k, s});
+    dist[s] = {0, k};
     while(!pq.empty() && !f) {
-        money = pq.top().first, days = pq.top().second, at = pq.top().third;
+        days = pq.top().first, money = pq.top().second, at = pq.top().third;
         pq.pop();
         if(at == e) {
             ans = days;
             f = true;
         }
-        if(dist[at][days] == money) {
-            if(days+1 < MAX_DAYS && dist[at][days+1] < money+salary[at]) {
-                dist[at][days+1] = money+salary[at];
-                pq.push({money+salary[at], days+1, at});
+        if(money >= dist[at].second) {
+            if(days+1 < MAX_DAYS && money+salary[at] > dist[at].second) {
+                dist[at].first = days+1, dist[at].second = money+salary[at];
+                pq.push({days+1, money+salary[at], at});
             }
             for(int i = 0; i < g[at].size(); i++) {
                 to = g[at][i].first, ticket = g[at][i].second;
-                if(money >= ticket && dist[to][days] < money-ticket) {
-                    dist[to][days] = money-ticket;
-                    pq.push({money-ticket, days, to});
+                if(money >= ticket && money-ticket > dist[to].second) {
+                    dist[to].first = days, dist[to].second = money-ticket;
+                    pq.push({days, money-ticket, to});
                 }
             }
         }
@@ -69,8 +79,11 @@ int main() {
             g[a].push_back({b, c});
         }
         ans = dijkstra(g, salary, s, e, p-r);
-        if(ans == UNVISITED) cout << "Sorry Kenny, Happiness is not for you :(" << endl; 
-        else cout << "Kenny happiness will cost " << ans << " days of work :)" << endl;
+        if(ans == UNVISITED) {
+            cout << "Sorry Kenny, Happiness is not for you :(" << endl;
+        } else {
+            cout << "Kenny happiness will cost " << ans << " days of work :)" << endl;
+        }
     }
     return 0;
 }
